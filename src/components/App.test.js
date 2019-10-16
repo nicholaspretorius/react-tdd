@@ -6,24 +6,31 @@ import App from "./App";
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const app = shallow(<App />);
+describe("App", () => {
+  const app = shallow(<App />);
+  it("renders the app correctly", () => {
+    expect(app).toMatchSnapshot();
+  });
 
-it("renders the app correctly", () => {
-  expect(app).toMatchSnapshot();
-});
+  it("initializes `state` with an empty list of gifts", () => {
+    expect(app.state("gifts")).toEqual([]);
+  });
 
-it("initializes `state` with an empty list of gifts", () => {
-  expect(app.state("gifts")).toEqual([]);
-});
+  describe("when clicking the add button", () => {
+    beforeEach(() => {
+      app.find(".btn-add").simulate("click");
+    });
 
-it("adds a new gift to `state` when clicking the add button", () => {
-  app.find(".btn-add").simulate("click");
+    afterEach(() => {
+      app.setState({ gifts: [] });
+    });
 
-  expect(app.state().gifts).toEqual([{ id: 1 }]);
-});
+    it("then adds a new gift to `state`", () => {
+      expect(app.state().gifts).toEqual([{ id: 1 }]);
+    });
 
-it("add a new item to the `gift-list` when clicking the add button", () => {
-  app.find(".btn-add").simulate("click");
-
-  expect(app.find(".gift-list").children().length).toEqual(1);
+    it("then adds a new item to the `gift-list`", () => {
+      expect(app.find(".gift-list").children().length).toEqual(1);
+    });
+  });
 });
