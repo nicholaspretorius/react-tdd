@@ -49,7 +49,9 @@ class Gift extends React.Component {
               }}
             />
           </FormGroup>
-          <Button onClick={() => removeGift(id)}>Remove</Button>
+          <Button onClick={() => removeGift(id)} className="btn-remove">
+            Remove
+          </Button>
         </Form>
       </div>
 
