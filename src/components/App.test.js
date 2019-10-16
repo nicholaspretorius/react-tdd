@@ -1,10 +1,7 @@
 import React from "react";
-import Enzyme, { shallow } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
+import { shallow } from "enzyme";
 
 import App from "./App";
-
-Enzyme.configure({ adapter: new Adapter() });
 
 describe("App", () => {
   const app = shallow(<App />);
@@ -17,6 +14,8 @@ describe("App", () => {
   });
 
   describe("when clicking the add button", () => {
+    const ID = 1;
+
     beforeEach(() => {
       app.find(".btn-add").simulate("click");
     });
@@ -26,11 +25,25 @@ describe("App", () => {
     });
 
     it("then adds a new gift to `state`", () => {
-      expect(app.state().gifts).toEqual([{ id: 1 }]);
+      expect(app.state().gifts).toEqual([{ id: ID }]);
     });
 
     it("then adds a new item to the `gift-list`", () => {
       expect(app.find(".gift-list").children().length).toEqual(1);
+    });
+
+    it("creates a Gift component", () => {
+      expect(app.find("Gift").exists()).toBe(true);
+    });
+
+    describe("and the user wants to remove the added gift", () => {
+      beforeEach(() => {
+        app.instance().handleRemoveGift(ID);
+      });
+
+      it("then removes the gift from `state`", () => {
+        expect(app.state().gifts).toEqual([]);
+      });
     });
   });
 });
